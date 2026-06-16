@@ -17,44 +17,86 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // Check if listing object exists and geocode the address
 if (listing && (listing.location || listing.country)) {
-    const query = `${listing.location}, ${listing.country}`;
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
+    const cleanedLocation = (listing.location || "").trim();
+    const cleanedCountry = (listing.country || "").trim();
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            if (data && data.length > 0) {
-                const lat = parseFloat(data[0].lat);
-                const lon = parseFloat(data[0].lon);
+    // Build a list of fallback queries to try sequentially
+    const queries = [];
 
-                // Set map view to the geocoded coordinates
-                map.setView([lat, lon], 12);
+    if (cleanedLocation && cleanedCountry) {
+        queries.push(`${cleanedLocation}, ${cleanedCountry}`);
+    }
 
-                // Custom FontAwesome location pin icon
-                const customIcon = L.divIcon({
-                    html: '<i class="fa-solid fa-location-dot fa-3x"></i>',
-                    iconSize: [30, 42],
-                    iconAnchor: [15, 42],
-                    popupAnchor: [0, -40],
-                    className: 'custom-leaflet-icon'
-                });
+    if (cleanedLocation) {
+        // If the location has parts separated by commas, try geocoding them individually with the country
+        if (cleanedLocation.includes(",")) {
+            const parts = cleanedLocation.split(",").map(p => p.trim()).filter(Boolean);
+            parts.forEach(part => {
+                if (cleanedCountry) {
+                    queries.push(`${part}, ${cleanedCountry}`);
+                }
+                queries.push(part);
+            });
+        }
+        queries.push(cleanedLocation);
+    }
 
-                // Add marker to the map
-                const marker = L.marker([lat, lon], { icon: customIcon }).addTo(map);
+    if (cleanedCountry) {
+        queries.push(cleanedCountry);
+    }
 
-                // Bind a modern popup style
-                const popupContent = `
-                    <h5>${listing.title}</h5>
-                    <p>${listing.location}, ${listing.country}</p>
-                    <small><i class="fa-solid fa-circle-info me-1"></i>Exact location provided after booking</small>
-                `;
+    // De-duplicate queries
+    const uniqueQueries = [...new Set(queries)];
 
-                marker.bindPopup(popupContent).openPopup();
-            } else {
-                console.warn("Geocoding returned no results for location: ", query);
-            }
-        })
-        .catch(error => {
-            console.error("Error fetching geocoding data from Nominatim: ", error);
-        });
+    function geocodeAddress(fallbackQueries) {
+        if (fallbackQueries.length === 0) {
+            console.warn("Geocoding failed for all fallback options.");
+            return;
+        }
+
+        const currentQuery = fallbackQueries.shift();
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(currentQuery)}&limit=1`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    const lat = parseFloat(data[0].lat);
+                    const lon = parseFloat(data[0].lon);
+
+                    // Set map view to the geocoded coordinates
+                    map.setView([lat, lon], 12);
+
+                    // Custom FontAwesome location pin icon
+                    const customIcon = L.divIcon({
+                        html: '<i class="fa-solid fa-location-dot fa-3x"></i>',
+                        iconSize: [30, 42],
+                        iconAnchor: [15, 42],
+                        popupAnchor: [0, -40],
+                        className: 'custom-leaflet-icon'
+                    });
+
+                    // Add marker to the map
+                    const marker = L.marker([lat, lon], { icon: customIcon }).addTo(map);
+
+                    // Bind a modern popup style
+                    const popupContent = `
+                        <h5>${listing.title}</h5>
+                        <p>${listing.location}, ${listing.country}</p>
+                        <small><i class="fa-solid fa-circle-info me-1"></i>Exact location provided after booking</small>
+                    `;
+
+                    marker.bindPopup(popupContent).openPopup();
+                } else {
+                    console.warn(`Geocoding returned no results for query: "${currentQuery}". Trying fallback...`);
+                    geocodeAddress(fallbackQueries);
+                }
+            })
+            .catch(error => {
+                console.error(`Error fetching geocoding data for query: "${currentQuery}":`, error);
+                geocodeAddress(fallbackQueries);
+            });
+    }
+
+    geocodeAddress(uniqueQueries);
 }
