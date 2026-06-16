@@ -1,0 +1,194 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="row mt-4 mb-5 justify-content-center">
+    <div class="col-12 col-md-10">
+        <!-- 1. Listing Title -->
+        <h2 class="fw-bold text-dark mb-3"><%= listing.title %></h2>
+        
+        <!-- 2. Large Image Showcase -->
+        <div class="mb-4 position-relative overflow-hidden rounded-4 shadow-sm" style="height: 50vh; min-height: 280px; max-height: 500px;">
+            <img src="<%= listing.image.url %>" class="w-100 h-100 object-fit-cover" alt="listing_image">
+        </div>
+
+        <!-- 3. Split Content Grid -->
+        <div class="row g-4">
+            <!-- Left Column: Details, Description, Amenities, Reviews -->
+            <div class="col-12 col-lg-7">
+                <!-- Hosted By Section -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h4 class="fw-bold text-dark mb-1">Entire place hosted by <%= listing.owner ? listing.owner.username : "Unknown Owner" %></h4>
+                        <p class="text-secondary mb-0" style="font-size: 0.9rem;">
+                            <i class="fa-solid fa-location-dot text-danger me-1"></i><%= listing.location %>, <%= listing.country %>
+                        </p>
+                    </div>
+                    <!-- Avatar mockup -->
+                    <div class="avatar bg-danger text-white rounded-circle d-flex align-items-center justify-content-center fw-bold fs-5 shadow-sm" style="width: 50px; height: 50px; flex-shrink: 0;">
+                        <%= listing.owner ? listing.owner.username.charAt(0).toUpperCase() : "U" %>
+                    </div>
+                </div>
+                <hr>
+
+                <!-- About section -->
+                <h5 class="fw-bold text-dark mb-3">About this space</h5>
+                <p class="text-secondary mb-4" style="line-height: 1.6; font-size: 0.95rem;">
+                    <%= listing.description %>
+                </p>
+
+                <!-- Amenities mock -->
+                <hr>
+                <h5 class="fw-bold text-dark mb-3">What this place offers</h5>
+                <div class="row g-3 mb-4 text-secondary" style="font-size: 0.95rem;">
+                    <div class="col-6"><i class="fa-solid fa-wifi me-2 text-danger"></i>Wifi (High speed)</div>
+                    <div class="col-6"><i class="fa-solid fa-square-parking me-2 text-danger"></i>Free parking on premises</div>
+                    <div class="col-6"><i class="fa-solid fa-kitchen-set me-2 text-danger"></i>Kitchen</div>
+                    <div class="col-6"><i class="fa-solid fa-snowflake me-2 text-danger"></i>Air conditioning</div>
+                    <div class="col-6"><i class="fa-solid fa-tv me-2 text-danger"></i>Cable TV</div>
+                    <div class="col-6"><i class="fa-solid fa-bath me-2 text-danger"></i>Hot water</div>
+                </div>
+
+                <!-- Owner actions -->
+                <% if(currUser && currUser._id.equals(listing.owner._id)) { %>
+                    <hr>
+                    <div class="d-flex gap-3 mb-4">
+                        <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark px-4 rounded-3 fw-bold">Edit Listing</a>
+                        <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="m-0">
+                            <button class="btn btn-outline-danger px-4 rounded-3 fw-bold">Delete</button>
+                        </form>
+                    </div>
+                <% } %>
+
+                <!-- Review input form -->
+                <% if(currUser) { %>
+                    <hr>
+                    <h4 class="mt-4 fw-bold">Leave a Review</h4>
+                    <form action="/listings/<%= listing._id %>/reviews" method="POST" class="mb-4 needs-validation" novalidate>
+                        <div class="mb-3 mt-3">
+                            <label for="rating" class="form-label fw-semibold text-secondary">Rating</label>
+                            <fieldset class="starability-basic">
+                              <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+                              <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                              <label for="first-rate1" title="Terrible">1 star</label>
+                              <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                              <label for="first-rate2" title="Not good">2 stars</label>
+                              <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                              <label for="first-rate3" title="Average">3 stars</label>
+                              <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                              <label for="first-rate4" title="Very good">4 stars</label>
+                              <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                              <label for="first-rate5" title="Amazing">5 stars</label>
+                            </fieldset>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comment" class="form-label fw-semibold text-secondary">Comments</label>
+                            <textarea name="review[comment]" id="comment" cols="30" rows="4" class="form-control shadow-none border" placeholder="Tell others about your experience..." required></textarea>
+                            <div class="invalid-feedback">Please enter some comments for the review.</div>
+                        </div>
+                        <button class="btn btn-outline-dark px-4 rounded-3 fw-bold">Submit</button>
+                    </form>
+                <% } %>
+
+                <!-- All Reviews list -->
+                <% if (listing.reviews.length > 0) { %>
+                    <hr>
+                    <h4 class="mb-3 mt-4 fw-bold">All Reviews</h4>
+                    <div class="row g-3">
+                        <% for (let review of listing.reviews) { %>
+                            <div class="col-12 col-sm-6">
+                                <div class="card h-100 shadow-sm p-3 mb-0" style="background-color: #fafafa; border: 1px solid rgba(0, 0, 0, 0.08) !important; border-radius: 12px;">
+                                    <div class="card-body p-0">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="card-subtitle fw-bold text-dark m-0">
+                                                <i class="fa-solid fa-circle-user text-secondary me-2 fs-5"></i>@<%= review.author ? review.author.username : "Anonymous" %> 
+                                            </h6>
+                                            <p class="starability-result" data-rating="<%= review.rating %>"></p>
+                                        </div>
+                                        <p class="card-text text-secondary mb-0 mt-2" style="font-size: 0.9rem; font-style: italic; line-height: 1.4;">
+                                            "<%= review.comment %>"
+                                        </p>
+                                    </div>
+                                    <% if (currUser && review.author && currUser._id.equals(review.author._id)) { %>
+                                        <form method="POST" class="mb-0 mt-3" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                                            <button class="btn btn-sm btn-dark px-3 rounded-2">Delete</button>
+                                        </form>
+                                    <% } %>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                <% } %>
+            </div>
+
+            <!-- Right Column: Sticky Booking Card Mockup -->
+            <div class="col-12 col-lg-5 ps-lg-4">
+                <div class="card booking-card border shadow-sm p-4 rounded-4 mb-4 sticky-lg-top" style="top: 6.5rem; z-index: 5; background-color: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.06) !important;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="fw-bold text-dark m-0">
+                            &#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> 
+                            <small class="text-muted fw-normal" style="font-size: 0.9rem;">/ night</small>
+                        </h4>
+                        <span class="fs-6 text-dark fw-semibold">
+                            <i class="fa-solid fa-star text-warning me-1"></i>4.9
+                        </span>
+                    </div>
+                    <hr class="text-muted my-3">
+
+                    <!-- Mock dates selector -->
+                    <div class="row g-0 border rounded-3 overflow-hidden mb-3">
+                        <div class="col-6 border-end border-bottom p-2">
+                            <label class="text-uppercase fw-bold text-secondary d-block" style="font-size: 0.65rem;">Check-In</label>
+                            <input type="date" class="form-control border-0 p-0 shadow-none bg-transparent" value="2026-06-20" style="font-size: 0.85rem; font-weight: 500;">
+                        </div>
+                        <div class="col-6 border-bottom p-2">
+                            <label class="text-uppercase fw-bold text-secondary d-block" style="font-size: 0.65rem;">Checkout</label>
+                            <input type="date" class="form-control border-0 p-0 shadow-none bg-transparent" value="2026-06-25" style="font-size: 0.85rem; font-weight: 500;">
+                        </div>
+                        <div class="col-12 p-2">
+                            <label class="text-uppercase fw-bold text-secondary d-block" style="font-size: 0.65rem;">Guests</label>
+                            <select class="form-select border-0 p-0 shadow-none bg-transparent" style="font-size: 0.85rem; font-weight: 500;">
+                                <option>1 guest</option>
+                                <option>2 guests</option>
+                                <option>3 guests</option>
+                                <option>4 guests</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Booking action -->
+                    <button class="btn btn-danger w-100 py-2.5 rounded-3 fw-bold mb-3" onclick="alert('Thank you for your interest! Booking confirmation is mock-only.')" style="background-color: #fe424d; border-color: #fe424d;">
+                        Reserve Space
+                    </button>
+                    <p class="text-center text-secondary mb-3" style="font-size: 0.8rem;">You won't be charged yet</p>
+                    
+                    <!-- Cost details breakdown -->
+                    <div class="d-flex justify-content-between mb-2 text-secondary" style="font-size: 0.9rem;">
+                        <span class="text-decoration-underline">&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : 0 %> x 5 nights</span>
+                        <span>&#8377;<%= listing.price ? (listing.price * 5).toLocaleString("en-IN") : 0 %></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 text-secondary" style="font-size: 0.9rem;">
+                        <span class="text-decoration-underline">Cleaning fee</span>
+                        <span>&#8377;500</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 text-secondary" style="font-size: 0.9rem;">
+                        <span class="text-decoration-underline">WanderLust service fee</span>
+                        <span>&#8377;1,200</span>
+                    </div>
+                    <hr class="text-muted">
+                    <div class="d-flex justify-content-between fw-bold text-dark fs-5">
+                        <span>Total before taxes</span>
+                        <span>&#8377;<%= listing.price ? (listing.price * 5 + 1700).toLocaleString("en-IN") : 1700 %></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Map Container -->
+        <hr class="my-4">
+        <div class="col-12 mb-4">
+            <h3 class="fw-bold mb-3">Where you'll be</h3>
+            <div id="map" data-title="<%= listing.title %>" data-location="<%= listing.location %>" data-country="<%= listing.country %>"></div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/map.js"></script>

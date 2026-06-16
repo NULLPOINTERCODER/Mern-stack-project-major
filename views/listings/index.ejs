@@ -1,0 +1,147 @@
+<% layout("layouts/boilerplate") %>
+<body>
+    <div class="d-flex flex-column flex-md-row align-items-center mb-4 gap-3">
+        <div id="filters" class="d-flex align-items-center overflow-x-auto py-2 gap-4 flex-grow-1" style="scrollbar-width: none; -ms-overflow-style: none; width: 100%;">
+            <div class="filter-item text-center <%= selectedCategory === 'Trending' ? 'active' : '' %>" onclick="filterCategory('Trending')">
+                <i class="fa-solid fa-fire fs-4 mb-1"></i>
+                <p class="m-0" style="font-size: 0.75rem; font-weight: 600;">Trending</p>
+            </div>
+            <div class="filter-item text-center <%= selectedCategory === 'Rooms' ? 'active' : '' %>" onclick="filterCategory('Rooms')">
+                <i class="fa-solid fa-bed fs-4 mb-1"></i>
+                <p class="m-0" style="font-size: 0.75rem; font-weight: 600;">Rooms</p>
+            </div>
+            <div class="filter-item text-center <%= selectedCategory === 'Iconic Cities' ? 'active' : '' %>" onclick="filterCategory('Iconic Cities')">
+                <i class="fa-solid fa-mountain-city fs-4 mb-1"></i>
+                <p class="m-0" style="font-size: 0.75rem; font-weight: 600;">Iconic Cities</p>
+            </div>
+            <div class="filter-item text-center <%= selectedCategory === 'Mountains' ? 'active' : '' %>" onclick="filterCategory('Mountains')">
+                <i class="fa-solid fa-mountain fs-4 mb-1"></i>
+                <p class="m-0" style="font-size: 0.75rem; font-weight: 600;">Mountains</p>
+            </div>
+            <div class="filter-item text-center <%= selectedCategory === 'Castles' ? 'active' : '' %>" onclick="filterCategory('Castles')">
+                <i class="fa-solid fa-fort-awesome fs-4 mb-1"></i>
+                <p class="m-0" style="font-size: 0.75rem; font-weight: 600;">Castles</p>
+            </div>
+            <div class="filter-item text-center <%= selectedCategory === 'Amazing Pools' ? 'active' : '' %>" onclick="filterCategory('Amazing Pools')">
+                <i class="fa-solid fa-person-swimming fs-4 mb-1"></i>
+                <p class="m-0" style="font-size: 0.75rem; font-weight: 600;">Amazing Pools</p>
+            </div>
+            <div class="filter-item text-center <%= selectedCategory === 'Camping' ? 'active' : '' %>" onclick="filterCategory('Camping')">
+                <i class="fa-solid fa-campground fs-4 mb-1"></i>
+                <p class="m-0" style="font-size: 0.75rem; font-weight: 600;">Camping</p>
+            </div>
+            <div class="filter-item text-center <%= selectedCategory === 'Farms' ? 'active' : '' %>" onclick="filterCategory('Farms')">
+                <i class="fa-solid fa-cow fs-4 mb-1"></i>
+                <p class="m-0" style="font-size: 0.75rem; font-weight: 600;">Farms</p>
+            </div>
+            <div class="filter-item text-center <%= selectedCategory === 'Arctic' ? 'active' : '' %>" onclick="filterCategory('Arctic')">
+                <i class="fa-solid fa-snowflake fs-4 mb-1"></i>
+                <p class="m-0" style="font-size: 0.75rem; font-weight: 600;">Arctic</p>
+            </div>
+            <div class="filter-item text-center <%= selectedCategory === 'Domes' ? 'active' : '' %>" onclick="filterCategory('Domes')">
+                <i class="fa-solid fa-igloo fs-4 mb-1"></i>
+                <p class="m-0" style="font-size: 0.75rem; font-weight: 600;">Domes</p>
+            </div>
+            <div class="filter-item text-center <%= selectedCategory === 'Boats' ? 'active' : '' %>" onclick="filterCategory('Boats')">
+                <i class="fa-solid fa-ship fs-4 mb-1"></i>
+                <p class="m-0" style="font-size: 0.75rem; font-weight: 600;">Boats</p>
+            </div>
+        </div>
+
+        <div class="tax-toggle border rounded-3 px-3 py-2 d-flex align-items-center gap-2 shadow-sm bg-white ms-md-auto" style="height: 3.2rem; min-width: 250px; justify-content: center;">
+            <div class="form-check form-switch form-check-reverse m-0">
+                <input class="form-check-input shadow-none cursor-pointer" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                <label class="form-check-label text-secondary fw-semibold cursor-pointer" for="flexSwitchCheckDefault" style="font-size: 0.85rem; user-select: none;">Display total with taxes</label>
+            </div>
+        </div>
+    </div>
+
+    <% if (q || selectedCategory) { %>
+        <div class="d-flex justify-content-between align-items-center mb-4 p-3 bg-white rounded-3 border shadow-sm">
+            <div>
+                <% if (q) { %>
+                    <span class="fs-5 text-dark">Search results for "<b><%= q %></b>"</span>
+                <% } else if (selectedCategory) { %>
+                    <span class="fs-5 text-dark">Category: "<b><%= selectedCategory %></b>"</span>
+                <% } %>
+                <span class="text-muted ms-2">(<%= allListings.length %> found)</span>
+            </div>
+            <a href="/listings" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold">Clear Filters</a>
+        </div>
+    <% } %>
+
+    <% if (allListings.length === 0) { %>
+        <div class="text-center my-5 py-5 bg-white border rounded-4 shadow-sm">
+            <i class="fa-solid fa-face-frown-open text-danger fa-4x mb-3"></i>
+            <h3 class="fw-bold text-dark">No Listings Found</h3>
+            <p class="text-secondary mb-4">We couldn't find anything matching your search. Try adjusting your filter or query.</p>
+            <a href="/listings" class="btn btn-danger rounded-pill px-4 py-2 fw-bold">Back to All Listings</a>
+        </div>
+    <% } else { %>
+        <div class="row row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 g-4 mb-5">
+            <% for(let listing of allListings) { %>
+                <div class="col">
+                    <a href="/listings/<%= listing._id %>" class="listing-link text-decoration-none">
+                        <div class="card h-100">
+                            <div class="card-img-container">
+                                <img src="<%= listing.image.url %>" class="card-img-top" alt="listing-image">
+                                <i class="fa-regular fa-heart favorite-icon" onclick="toggleFavorite(event, this)"></i>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text mb-1">
+                                    <span class="fw-bold text-dark fs-5"><%= listing.title %></span>
+                                </p>
+                                <p class="card-text text-secondary mb-1">
+                                    <i class="fa-solid fa-location-dot text-danger me-1"></i><%= listing.location %>, <%= listing.country %>
+                                </p>
+                                <p class="card-text mt-2">
+                                    <span class="price-info fw-bold text-dark fs-6">&#8377;<%= listing.price ? listing.price.toLocaleString('en-IN') : "N/A" %></span> <span class="text-muted">/ night</span>
+                                    <span class="tax-info d-none text-danger fw-semibold" style="font-size: 0.9rem;"><br>+18% GST = &#8377;<%= listing.price ? Math.round(listing.price * 1.18).toLocaleString('en-IN') : "N/A" %> total</span>
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <% } %>
+        </div>
+    <% } %>
+
+    <script>
+        // Real-time tax toggle
+        let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+        taxSwitch.addEventListener("change", () => {
+            let taxInfo = document.getElementsByClassName("tax-info");
+            for (let info of taxInfo) {
+                if (taxSwitch.checked) {
+                    info.classList.remove("d-none");
+                } else {
+                    info.classList.add("d-none");
+                }
+            }
+        });
+
+        // Toggle category filters
+        function filterCategory(category) {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('category') === category) {
+                window.location.href = '/listings';
+            } else {
+                window.location.href = `/listings?category=${encodeURIComponent(category)}`;
+            }
+        }
+
+        // Toggle favorite heart state
+        function toggleFavorite(event, icon) {
+            event.preventDefault(); // prevent navigation
+            if (icon.classList.contains('fa-regular')) {
+                icon.classList.remove('fa-regular');
+                icon.classList.add('fa-solid');
+                icon.style.color = '#fe424d';
+            } else {
+                icon.classList.remove('fa-solid');
+                icon.classList.add('fa-regular');
+                icon.style.color = 'rgba(255, 255, 255, 0.9)';
+            }
+        }
+    </script>
+</body>

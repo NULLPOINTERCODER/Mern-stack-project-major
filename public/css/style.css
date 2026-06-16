@@ -1,0 +1,203 @@
+body{
+ font-family: "Plus Jakarta Sans", sans-serif !important;
+}
+
+.navbar{
+    height: 5rem;
+    background-color: white;
+
+}
+.fa-compass{
+    color:#fe424d;
+    font-size:2rem;
+}
+.nav-link{
+    color:#222222 !important;
+}
+.f-info-links a{
+    text-decoration: none;
+    color: #222222;
+}
+.f-info-links a:hover{
+    text-decoration: underline;
+}
+.f-info-links{
+    width: 100%;
+}
+.f-info-socials{
+    width: 100%;
+    font-size:1.2rem;
+}
+.f-info-socials i{
+    margin-right: 1rem;
+}
+.f-info{
+    text-align: center;
+    height:8rem;
+    background-color: #ebebeb;
+
+    display: flex;
+    flex-wrap:wrap ;
+    justify-content: center;
+    align-items: space-evenly;
+}
+
+.card {
+  border: none !important;
+  margin-bottom: 1.5rem !important;
+  background-color: transparent !important;
+}
+
+.card-img-top {
+  border-radius: 1rem !important;
+  width: 100% !important;
+  height: 18rem !important;
+  object-fit: cover !important;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card-img-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.listing-link:hover .card-img-top {
+  transform: scale(1.03);
+}
+
+.card-body {
+  padding: 0.5rem 0 0 0 !important;
+}
+
+.card-text {
+  font-weight: 500 !important;
+}
+
+/* Favorite Heart Icon Overlay */
+.favorite-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 1.35rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  transition: transform 0.15s ease-in-out, color 0.15s;
+  z-index: 10;
+}
+
+.favorite-icon:hover {
+  transform: scale(1.15);
+  color: #fe424d !important;
+}
+
+/* Filters Bar */
+#filters {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.filter-item {
+  color: #717171;
+  opacity: 0.75;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 0.5rem;
+  min-width: 70px;
+}
+
+.filter-item:hover, .filter-item.active {
+  opacity: 1;
+  color: #fe424d;
+  border-bottom: 2px solid #fe424d;
+}
+
+/* Tax Toggle Styling */
+.tax-toggle {
+  transition: border-color 0.25s;
+}
+
+.tax-toggle:hover {
+  border-color: #fe424d !important;
+}
+
+.listing-link{
+    text-decoration: none;
+    color: #222222;
+}
+.listing-link:hover{
+    text-decoration: none;
+    color: #222222;
+}
+.card-img-overlay{
+    opacity: 0;
+}
+.card-img-overlay:hover{
+    opacity:0.2;
+    background-color: white;
+}
+
+#map {
+  height: 400px;
+  width: 100%;
+  border-radius: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  z-index: 1;
+}
+
+/* Custom styling for Leaflet Popups to look premium */
+.leaflet-popup-content-wrapper {
+  border-radius: 12px !important;
+  padding: 8px 12px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+}
+
+.leaflet-popup-content h5 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #222222;
+}
+
+.leaflet-popup-content p {
+  font-size: 0.9rem;
+  margin: 0;
+  color: #717171;
+}
+
+.leaflet-popup-content small {
+  font-size: 0.75rem;
+  color: #fe424d;
+  font-weight: 500;
+}
+
+.custom-leaflet-icon i {
+  filter: drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.3));
+  color: #fe424d !important;
+}
+
+/* Footer Link Custom Styles */
+.footer-link {
+  transition: color 0.15s ease-in-out;
+}
+
+.footer-link:hover {
+  color: #fe424d !important;
+  text-decoration: underline !important;
+}
+
+.hover-danger {
+  color: #222222;
+  transition: color 0.15s ease-in-out;
+}
+
+.hover-danger:hover {
+  color: #fe424d !important;
+}

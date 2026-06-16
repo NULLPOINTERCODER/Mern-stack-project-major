@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand-md bg-white border-bottom sticky-top py-3">
+  <div class="container">
+    <a class="navbar-brand" href="/listings"><i class="fa-solid fa-compass text-danger fs-3"></i></a>
+    
+    <!-- Centered Search Bar -->
+    <div class="navbar-nav mx-auto d-none d-md-block">
+      <form class="d-flex align-items-center border rounded-pill shadow-sm p-1 ps-3 pe-1 bg-white search-form" method="GET" action="/listings" style="max-width: 380px; width: 100%;">
+        <input class="form-control border-0 shadow-none py-0 search-input" type="search" name="q" placeholder="Search destinations..." aria-label="Search" value="<%= typeof q !== 'undefined' && q ? q : '' %>" style="font-size: 0.85rem; font-weight: 500;">
+        <button class="btn btn-danger rounded-circle p-2 d-flex align-items-center justify-content-center search-btn" type="submit" style="width: 28px; height: 28px; background-color: #fe424d; border-color: #fe424d;">
+          <i class="fa-solid fa-magnifying-glass text-white" style="font-size: 0.75rem;"></i>
+        </button>
+      </form>
+    </div>
+
+    <!-- Hamburger Toggler -->
+    <button class="navbar-toggler shadow-none border-0 px-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-controls="mobileMenu" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <!-- Smooth Right-to-Left Offcanvas Drawer -->
+    <div class="offcanvas offcanvas-end w-50" tabindex="-1" id="mobileMenu" aria-labelledby="mobileMenuLabel">
+      <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title fw-bold d-flex align-items-center gap-2" id="mobileMenuLabel">
+          <i class="fa-solid fa-compass text-danger fs-4"></i> WanderLust
+        </h5>
+        <!-- The Cross Icon -->
+        <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <div class="navbar-nav ms-auto gap-2">
+         
+          <a class="nav-link text-dark fw-semibold" href="/listings">Explore</a>
+          <a class="nav-link text-dark fw-semibold" href="/listings/new"><i class="fa-solid fa-plus"></i>Airbnb your home</a>
+        </div>
+        <div class="navbar-nav ms-auto gap-2">
+          <% if(!currUser){%>
+          <a class="nav-link text-dark fw-semibold" href="/signup"><b>Sign Up</b></a>
+          <a class="nav-link text-dark fw-semibold" href="/login"><b>Login</b></a>
+          <%}else {%>
+          <a class="nav-link text-dark fw-semibold" href="/logout"><b>Logout</b></a> 
+          <%}%>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

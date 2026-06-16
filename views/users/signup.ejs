@@ -1,0 +1,78 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="row mt-5 mb-5 justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-5">
+        <div class="card shadow border-0 p-4 rounded-4" style="background-color: #ffffff; box-shadow: 0 12px 30px rgba(0,0,0,0.08) !important;">
+            <div class="card-body text-center p-0">
+                <!-- Brand logo / icon -->
+                <div class="mb-4">
+                    <i class="fa-solid fa-compass text-danger fa-3x mb-2"></i>
+                    <h3 class="fw-bold text-dark m-0">Create your account</h3>
+                    <p class="text-secondary mb-0 mt-1" style="font-size: 0.9rem;">Join WanderLust to start hosting and booking homes</p>
+                </div>
+
+                <form action="/signup" method="POST" class="needs-validation text-start" novalidate>
+                    <!-- Username -->
+                    <div class="mb-3">
+                        <label for="username" class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="fa-solid fa-user"></i></span>
+                            <input 
+                                name="username" 
+                                id="username"
+                                type="text" 
+                                class="form-control border-start-0 ps-0 shadow-none bg-light"
+                                placeholder="Choose a username"
+                                required>
+                            <div class="invalid-feedback">Please choose a username.</div>
+                        </div>
+                    </div>
+
+                    <!-- Email Address -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="fa-solid fa-envelope"></i></span>
+                            <input 
+                                name="email" 
+                                id="email"
+                                type="email" 
+                                class="form-control border-start-0 ps-0 shadow-none bg-light"
+                                placeholder="name@example.com"
+                                required>
+                            <div class="invalid-feedback">Please enter a valid email address.</div>
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-4">
+                        <label for="password" class="form-label fw-semibold text-secondary" style="font-size: 0.85rem;">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="fa-solid fa-lock"></i></span>
+                            <input 
+                                name="password" 
+                                id="password"
+                                type="password" 
+                                class="form-control border-start-0 ps-0 shadow-none bg-light"
+                                placeholder="Create a strong password"
+                                required>
+                            <div class="invalid-feedback">Please enter a password.</div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-danger w-100 py-2 rounded-3 fw-bold shadow-sm" style="background-color: #fe424d; border-color: #fe424d; font-size: 0.95rem;">
+                        Sign Up
+                    </button>
+                </form>
+
+                <!-- Divider & Redirect to Login -->
+                <hr class="my-4 text-muted">
+                <p class="text-secondary mb-0" style="font-size: 0.9rem;">
+                    Already have an account? 
+                    <a href="/login" class="text-danger fw-semibold text-decoration-none hover-underline">Log In</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
